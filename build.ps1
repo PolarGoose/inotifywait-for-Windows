@@ -20,15 +20,14 @@ $ProgressPreference = "SilentlyContinue"
 
 $root = Resolve-Path "$PSScriptRoot"
 $buildDir = "$root/build"
-$gitCommand = Get-Command -Name git
 
 Info "Remove '$buildDir' folder if it exists"
 Remove-Item $buildDir -Force -Recurse -ErrorAction SilentlyContinue
 New-Item $buildDir -Force -ItemType "directory" > $null
 
 Info "Clone inotify-win git repository"
-& $gitCommand clone --depth 1 https://github.com/thekid/inotify-win.git $buildDir/inotify-win
-CheckReturnCodeOfPreviousCommand "git failed"
+git clone --depth 1 --branch v2.0.0 https://github.com/thekid/inotify-win.git $buildDir/inotify-win
+CheckReturnCodeOfPreviousCommand "git clone failed"
 
 Info "Copy the csproj file to the inotify-win directory"
 Copy-Item -Path $root/inotifywait.csproj -Destination $buildDir/inotify-win/inotifywait.csproj
